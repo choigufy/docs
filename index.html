@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>choishin.net — 기술 문서</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --green: #3fb950;
+    --green-dim: #1a4d2e;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --yellow: #e3b341;
+    --red: #f85149;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #484f58;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Noto Sans KR', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── 사이드바 ── */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 220px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-logo span { color: var(--text2); font-weight: 400; }
+
+  .nav-section { padding: 8px 20px 4px; font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+
+  .nav-item {
+    display: block;
+    padding: 6px 20px;
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: var(--mono);
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--green);
+  }
+
+  /* ── 메인 콘텐츠 ── */
+  .main {
+    margin-left: 220px;
+    padding: 40px 48px;
+    max-width: 1100px;
+  }
+
+  /* ── 섹션 헤더 ── */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 22px;
+    background: var(--green);
+    border-radius: 2px;
+  }
+
+  .section-sub {
+    color: var(--text2);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+
+  .subsection-title {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--green);
+    margin: 28px 0 12px;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  /* ── 배지 ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-green { background: var(--green-dim); color: var(--green); }
+  .badge-blue { background: #1c3a5e; color: var(--blue); }
+  .badge-purple { background: #2d1f4e; color: var(--purple); }
+  .badge-yellow { background: #3d2e00; color: var(--yellow); }
+  .badge-red { background: #3d0f0f; color: var(--red); }
+
+  /* ── 코드 블록 ── */
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+
+  .code-comment { color: var(--text3); }
+  .code-key { color: var(--blue); }
+  .code-val { color: var(--green); }
+  .code-type { color: var(--purple); }
+  .code-str { color: var(--yellow); }
+
+  /* ── 테이블 ── */
+  .doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .doc-table th {
+    background: var(--surface2);
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .doc-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .doc-table tr:last-child td { border-bottom: none; }
+  .doc-table tr:hover td { background: var(--surface2); }
+
+  .doc-table td:first-child {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+
+  /* ── 아키텍처 다이어그램 ── */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 16px;
+  }
+
+  .arch-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .arch-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-align: center;
+    min-width: 130px;
+  }
+
+  .arch-box.green { border-color: var(--green); color: var(--green); }
+  .arch-box.blue { border-color: var(--blue); color: var(--blue); }
+  .arch-box.purple { border-color: var(--purple); color: var(--purple); }
+  .arch-box.yellow { border-color: var(--yellow); color: var(--yellow); }
+  .arch-box .arch-label { font-size: 10px; color: var(--text3); margin-top: 3px; }
+
+  .arch-arrow {
+    color: var(--text3);
+    font-size: 18px;
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  .arch-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .arch-divider span {
+    position: absolute;
+    left: 50%;
+    top: -9px;
+    transform: translateX(-50%);
+    background: var(--surface);
+    padding: 0 12px;
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* ── 정보구조도 ── */
+  .ia-tree {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 2;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+  }
+
+  .ia-root { color: var(--green); font-weight: 700; font-size: 15px; }
+  .ia-l1 { color: var(--blue); padding-left: 24px; }
+  .ia-l2 { color: var(--text2); padding-left: 48px; font-size: 12px; }
+  .ia-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .ia-auto { background: #1a4d2e; color: var(--green); }
+  .ia-manual { background: #1c3a5e; color: var(--blue); }
+  .ia-planned { background: var(--surface2); color: var(--text3); }
+
+  /* ── 와이어프레임 ── */
+  .wireframe {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .wf-browser {
+    background: var(--surface2);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wf-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .wf-url {
+    background: var(--bg);
+    border-radius: 4px;
+    padding: 3px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    flex: 1;
+    max-width: 300px;
+  }
+
+  .wf-nav {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wf-logo { font-family: var(--mono); font-size: 12px; color: var(--green); }
+  .wf-links { display: flex; gap: 20px; }
+  .wf-link { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+  .wf-link.active { color: var(--text); border-bottom: 1px solid var(--green); }
+
+  .wf-body { padding: 24px; }
+  .wf-label { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 6px; }
+
+  .wf-terminal {
+    background: #1a2b1b;
+    border: 1px solid var(--green-dim);
+    border-radius: 6px;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .wf-terminal .prompt { color: var(--green); }
+  .wf-terminal .cmd { color: var(--text); }
+  .wf-terminal .out { color: var(--purple); }
+
+  .wf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .wf-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .wf-card-title { font-family: var(--mono); font-size: 12px; color: var(--green); margin-bottom: 4px; }
+  .wf-card-desc { font-size: 11px; color: var(--text2); }
+  .wf-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    background: var(--green-dim);
+    color: var(--green);
+    border-radius: 3px;
+    font-family: var(--mono);
+    float: right;
+  }
+
+  .wf-timeline { margin-top: 12px; }
+  .wf-tl-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .wf-tl-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 2px solid var(--green-dim);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .wf-tl-content {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 12px;
+    flex: 1;
+    font-size: 11px;
+  }
+  .wf-tl-date { color: var(--text3); font-family: var(--mono); }
+  .wf-tl-title { color: var(--text); font-weight: 500; }
+
+  .wf-table-preview {
+    width: 100%;
+    font-size: 11px;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-family: var(--mono);
+  }
+  .wf-table-preview th {
+    background: var(--surface2);
+    color: var(--text2);
+    padding: 6px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+  }
+  .wf-table-preview td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .wf-table-preview .cost { color: var(--red); }
+  .wf-bar { height: 4px; border-radius: 2px; background: var(--surface2); }
+  .wf-bar-fill { height: 100%; border-radius: 2px; background: var(--red); }
+
+  /* ── 요약 카드 ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .stat-label { font-size: 11px; color: var(--text2); margin-bottom: 6px; font-family: var(--mono); }
+  .stat-value { font-family: var(--mono); font-size: 20px; font-weight: 700; }
+
+  /* ── API 엔드포인트 ── */
+  .api-endpoint {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .api-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .api-method {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .api-method.get { background: #1a4d2e; color: var(--green); }
+  .api-method.post { background: #1c3a5e; color: var(--blue); }
+  .api-path { font-family: var(--mono); font-size: 13px; color: var(--text); }
+  .api-desc { font-size: 12px; color: var(--text2); margin-left: auto; }
+  .api-body { padding: 12px 16px; }
+
+  /* ── 자동화 플로우 ── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .flow-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .flow-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .flow-dot.green { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+  .flow-dot.blue { background: #1c3a5e; color: var(--blue); border: 1px solid var(--blue); }
+  .flow-connector {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+  .flow-content {
+    padding: 4px 0 24px;
+  }
+  .flow-title { font-weight: 600; color: var(--text); font-size: 13px; }
+  .flow-detail { font-size: 12px; color: var(--text2); font-family: var(--mono); margin-top: 2px; }
+
+  /* ── 분리선 ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 24px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .wf-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 사이드바 -->
+<nav class="sidebar">
+  <div class="sidebar-logo">~/hyoshin-log<br><span>기술 문서 v1.0</span></div>
+  <div class="nav-section">개요</div>
+  <a class="nav-item active" href="#overview">프로젝트 개요</a>
+  <a class="nav-item" href="#arch">시스템 아키텍처</a>
+  <div class="nav-section">설계</div>
+  <a class="nav-item" href="#ia">정보 구조도 (IA)</a>
+  <a class="nav-item" href="#wireframe">와이어프레임</a>
+  <div class="nav-section">기술</div>
+  <a class="nav-item" href="#db">DB 스키마</a>
+  <a class="nav-item" href="#api">API 명세</a>
+  <a class="nav-item" href="#automation">자동화 시스템</a>
+  <div class="nav-section">명세</div>
+  <a class="nav-item" href="#srs">소프트웨어 요구사항</a>
+  <a class="nav-item" href="#env">환경변수</a>
+  <a class="nav-item" href="#trouble">트러블슈팅</a>
+</nav>
+
+<div class="main">
+
+  <!-- ── 개요 ── -->
+  <section class="section" id="overview">
+    <div class="section-title">프로젝트 개요</div>
+    <div class="section-sub">choishin.net — 개인 포트폴리오 & 개발 로그 웹사이트</div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">도메인</div>
+        <div class="stat-value" style="color:var(--green);font-size:15px">choishin.net</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">월 비용</div>
+        <div class="stat-value" style="color:var(--blue)">$0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">개발 기간</div>
+        <div class="stat-value" style="color:var(--purple)">1일</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">배포</div>
+        <div class="stat-value" style="color:var(--yellow);font-size:15px">Auto</div>
+      </div>
+    </div>
+
+    <table class="doc-table">
+      <tr><th>항목</th><th>내용</th></tr>
+      <tr><td>GitHub</td><td>github.com/choigufy/my-portfolio</td></tr>
+      <tr><td>호스팅</td><td>Vercel (GitHub 연동 자동 배포)</td></tr>
+      <tr><td>데이터베이스</td><td>Supabase PostgreSQL (무료 500MB)</td></tr>
+      <tr><td>프레임워크</td><td>Next.js 15 App Router + React 19</td></tr>
+      <tr><td>스타일링</td><td>Tailwind CSS + Inline Style (Courier New 모노스페이스)</td></tr>
+      <tr><td>자동화</td><td>Python 3.11 (obsidian_sync.py, token_collector.py)</td></tr>
+    </table>
+  </section>
+
+  <!-- ── 아키텍처 ── -->
+  <section class="section" id="arch">
+    <div class="section-title">시스템 아키텍처</div>
+    <div class="section-sub">전체 데이터 흐름 및 컴포넌트 관계</div>
+
+    <div class="arch-diagram">
+      <!-- 입력 레이어 -->
+      <div class="arch-row">
+        <div class="arch-box yellow">Obsidian<div class="arch-label">Day Planner .md</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box green">obsidian_sync.py<div class="arch-label">watchdog 파일 감시</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box blue">daily_logs<div class="arch-label">Supabase Table</div></div>
+      </div>
+
+      <div class="arch-divider"><span>자동화 레이어</span></div>
+
+      <div class="arch-row">
+        <div class="arch-box yellow">Claude Code<div class="arch-label">~/.claude/**/*.jsonl</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box green">token_collector.py<div class="arch-label">JSONL 파싱 + 비용계산</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box blue">claude_usage<div class="arch-label">Supabase Table</div></div>
+      </div>
+
+      <div class="arch-divider"><span>서비스 레이어</span></div>
+
+      <div class="arch-row">
+        <div class="arch-box blue">Supabase<div class="arch-label">PostgreSQL + REST API</div></div>
+        <div class="arch-arrow">↔</div>
+        <div class="arch-box green">Next.js App<div class="arch-label">Vercel 호스팅</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box purple">브라우저<div class="arch-label">choishin.net</div></div>
+      </div>
+
+      <div class="arch-divider"><span>배포 레이어</span></div>
+
+      <div class="arch-row">
+        <div class="arch-box" style="color:var(--text2)">로컬 개발<div class="arch-label">npm run dev</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="color:var(--text2)">GitHub push<div class="arch-label">choigufy/my-portfolio</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box green">Vercel 자동 배포<div class="arch-label">1~2분 소요</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 정보구조도 ── -->
+  <section class="section" id="ia">
+    <div class="section-title">정보 구조도 (IA)</div>
+    <div class="section-sub">사이트 전체 페이지 구조 및 데이터 연결</div>
+
+    <div class="ia-tree">
+      <div class="ia-root">🌐 choishin.net</div>
+      <div class="ia-l1">├── / (메인)<span class="ia-badge ia-manual">수동</span></div>
+      <div class="ia-l2">├── 터미널 타이핑 애니메이션</div>
+      <div class="ia-l2">└── 섹션 카드 4개 (네비게이션)</div>
+
+      <div class="ia-l1">├── /schedule (작업 타임라인)<span class="ia-badge ia-auto">자동 연동</span></div>
+      <div class="ia-l2">├── Obsidian Day Planner → obsidian_sync.py → daily_logs</div>
+      <div class="ia-l2">└── 날짜 역순 타임라인, 클릭 시 본문 펼침</div>
+
+      <div class="ia-l1">├── /portfolio (포트폴리오)<span class="ia-badge ia-manual">수동 입력</span></div>
+      <div class="ia-l2">├── Supabase projects 테이블</div>
+      <div class="ia-l2">└── 기술스택 태그 필터링</div>
+
+      <div class="ia-l1">├── /blog (블로그)<span class="ia-badge ia-manual">수동 작성</span></div>
+      <div class="ia-l2">├── Supabase blog_posts 테이블 (published=true만)</div>
+      <div class="ia-l2">└── /blog/[slug] 상세 페이지 (미구현)</div>
+
+      <div class="ia-l1">└── /tokens (토큰 대시보드)<span class="ia-badge ia-auto">자동 수집</span></div>
+      <div class="ia-l2">├── token_collector.py → claude_usage 테이블</div>
+      <div class="ia-l2">└── 날짜별 테이블 + 누적 합계 카드</div>
+    </div>
+  </section>
+
+  <!-- ── 와이어프레임 ── -->
+  <section class="section" id="wireframe">
+    <div class="section-title">와이어프레임</div>
+    <div class="section-sub">주요 페이지 UI 구조</div>
+
+    <!-- 메인 페이지 -->
+    <div class="subsection-title">// 메인 페이지 (/)</div>
+    <div class="wireframe">
+      <div class="wf-browser">
+        <div class="wf-dot" style="background:#ff5f56"></div>
+        <div class="wf-dot" style="background:#ffbd2e"></div>
+        <div class="wf-dot" style="background:#27c93f"></div>
+        <div class="wf-url">choishin.net</div>
+      </div>
+      <div class="wf-nav">
+        <div class="wf-logo">~/hyoshin-log</div>
+        <div class="wf-links">
+          <div class="wf-link active">./home</div>
+          <div class="wf-link">./schedule</div>
+          <div class="wf-link">./portfolio</div>
+          <div class="wf-link">./blog</div>
+          <div class="wf-link">./tokens</div>
+        </div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-terminal">
+          <div><span class="prompt">hyoshin@dev:~$</span> <span class="cmd">whoami</span></div>
+          <div style="color:var(--purple)">안녕하세요, 효신입니다.▋</div>
+          <div style="margin-top:8px"><span class="prompt">hyoshin@dev:~$</span> <span class="cmd">ls ./pages</span></div>
+          <div style="color:var(--red)">schedule&nbsp;&nbsp;portfolio&nbsp;&nbsp;blog&nbsp;&nbsp;tokens</div>
+        </div>
+        <div class="wf-grid">
+          <div class="wf-card"><div class="wf-card-title">./schedule <span class="wf-tag">daily</span></div><div class="wf-card-desc">매일의 작업 타임라인</div></div>
+          <div class="wf-card"><div class="wf-card-title">./portfolio <span class="wf-tag">projects</span></div><div class="wf-card-desc">만들었던 것들 모음</div></div>
+          <div class="wf-card"><div class="wf-card-title">./blog <span class="wf-tag">writing</span></div><div class="wf-card-desc">생각과 과정을 기록</div></div>
+          <div class="wf-card"><div class="wf-card-title">./tokens <span class="wf-tag">analytics</span></div><div class="wf-card-desc">Claude 토큰 사용량 분석</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 스케줄 페이지 -->
+    <div class="subsection-title">// 스케줄 페이지 (/schedule)</div>
+    <div class="wireframe">
+      <div class="wf-browser">
+        <div class="wf-dot" style="background:#ff5f56"></div>
+        <div class="wf-dot" style="background:#ffbd2e"></div>
+        <div class="wf-dot" style="background:#27c93f"></div>
+        <div class="wf-url">choishin.net/schedule</div>
+      </div>
+      <div class="wf-nav">
+        <div class="wf-logo">~/hyoshin-log</div>
+        <div class="wf-links">
+          <div class="wf-link">./home</div>
+          <div class="wf-link active">./schedule</div>
+          <div class="wf-link">./portfolio</div>
+          <div class="wf-link">./blog</div>
+          <div class="wf-link">./tokens</div>
+        </div>
+      </div>
+      <div class="wf-body">
+        <div class="wf-label">// daily schedule — 작업 타임라인</div>
+        <div class="wf-timeline">
+          <div class="wf-tl-item">
+            <div style="display:flex;flex-direction:column;align-items:center">
+              <div class="wf-tl-dot"></div>
+              <div style="width:1px;height:30px;background:var(--border)"></div>
+            </div>
+            <div class="wf-tl-content">
+              <div class="wf-tl-date">2026-04-09</div>
+              <div class="wf-tl-title">포트폴리오 웹사이트 구축 완료</div>
+              <div style="margin-top:6px;display:flex;gap:4px">
+                <span style="font-size:10px;padding:1px 6px;background:var(--green-dim);color:var(--green);border-radius:3px;font-family:var(--mono)">Next.js</span>
+                <span style="font-size:10px;padding:1px 6px;background:var(--green-dim);color:var(--green);border-radius:3px;font-family:var(--mono)">Supabase</span>
+                <span style="font-size:10px;padding:1px 6px;background:var(--green-dim);color:var(--green);border-radius:3px;font-family:var(--mono)">daily</span>
+              </div>
+            </div>
+          </div>
+          <div class="wf-tl-item">
+            <div class="wf-tl-dot" style="background:var(--text3);border-color:var(--border)"></div>
+            <div class="wf-tl-content" style="border-color:var(--border)">
+              <div class="wf-tl-date">2026-04-08</div>
+              <div class="wf-tl-title">Claude Code 토큰 최적화 설정 완료</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 토큰 페이지 -->
+    <div class="subsection-title">// 토큰 대시보드 (/tokens)</div>
+    <div class="wireframe">
+      <div class="wf-browser">
+        <div class="wf-dot" style="background:#ff5f56"></div>
+        <div class="wf-dot" style="background:#ffbd2e"></div>
+        <div class="wf-dot" style="background:#27c93f"></div>
+        <div class="wf-url">choishin.net/tokens</div>
+      </div>
+      <div class="wf-body" style="padding:16px">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+          <div class="wf-card"><div class="wf-card-title" style="color:var(--red)">총 비용</div><div style="font-family:var(--mono);font-weight:700;color:var(--red)">$15.10</div></div>
+          <div class="wf-card"><div class="wf-card-title">입력 토큰</div><div style="font-family:var(--mono)">1,640</div></div>
+          <div class="wf-card"><div class="wf-card-title">출력 토큰</div><div style="font-family:var(--mono)">198,967</div></div>
+          <div class="wf-card"><div class="wf-card-title">캐시 읽기</div><div style="font-family:var(--mono)">22,469,271</div></div>
+        </div>
+        <table class="wf-table-preview">
+          <tr><th>날짜</th><th>입력</th><th>출력</th><th>캐시생성</th><th>캐시읽기</th><th>비용바</th><th>비용</th></tr>
+          <tr>
+            <td>2026-04-06</td><td>1,265</td><td>184,560</td><td>1,102,173</td><td>19,166,415</td>
+            <td><div class="wf-bar"><div class="wf-bar-fill" style="width:85%"></div></div></td>
+            <td class="cost">$12.6553</td>
+          </tr>
+          <tr>
+            <td>2026-04-08</td><td>375</td><td>14,407</td><td>329,512</td><td>3,302,856</td>
+            <td><div class="wf-bar"><div class="wf-bar-fill" style="width:20%"></div></div></td>
+            <td class="cost">$2.4438</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DB 스키마 ── -->
+  <section class="section" id="db">
+    <div class="section-title">DB 스키마</div>
+    <div class="section-sub">Supabase PostgreSQL 테이블 구조</div>
+
+    <div class="subsection-title">daily_logs — Obsidian 데일리 노트</div>
+    <table class="doc-table">
+      <tr><th>컬럼</th><th>타입</th><th>제약</th><th>설명</th></tr>
+      <tr><td>id</td><td><span class="badge badge-purple">uuid</span></td><td>PK DEFAULT gen_random_uuid()</td><td>고유 식별자</td></tr>
+      <tr><td>date</td><td><span class="badge badge-blue">date</span></td><td>UNIQUE NOT NULL</td><td>날짜 (upsert 기준키)</td></tr>
+      <tr><td>title</td><td><span class="badge badge-blue">text</span></td><td>NOT NULL</td><td>오늘 한 일 첫 번째 항목</td></tr>
+      <tr><td>content</td><td><span class="badge badge-blue">text</span></td><td></td><td>오늘 한 일 + 메모 + 내일 할 일 합본</td></tr>
+      <tr><td>tags</td><td><span class="badge badge-blue">text[]</span></td><td></td><td>#태그 자동 추출 배열, "daily" 기본 포함</td></tr>
+      <tr><td>created_at</td><td><span class="badge badge-blue">timestamptz</span></td><td>DEFAULT now()</td><td>자동 생성 시간</td></tr>
+    </table>
+
+    <div class="subsection-title">claude_usage — 토큰 사용량</div>
+    <table class="doc-table">
+      <tr><th>컬럼</th><th>타입</th><th>제약</th><th>설명</th></tr>
+      <tr><td>id</td><td><span class="badge badge-purple">uuid</span></td><td>PK</td><td>고유 식별자</td></tr>
+      <tr><td>date</td><td><span class="badge badge-blue">date</span></td><td>UNIQUE NOT NULL</td><td>날짜 (upsert 기준키)</td></tr>
+      <tr><td>input_tokens</td><td><span class="badge badge-green">int</span></td><td>DEFAULT 0</td><td>입력 토큰 수</td></tr>
+      <tr><td>output_tokens</td><td><span class="badge badge-green">int</span></td><td>DEFAULT 0</td><td>출력 토큰 수</td></tr>
+      <tr><td>cache_creation_input_tokens</td><td><span class="badge badge-yellow">bigint</span></td><td>DEFAULT 0</td><td>캐시 생성 토큰 (per 1M: $3.75)</td></tr>
+      <tr><td>cache_read_input_tokens</td><td><span class="badge badge-yellow">bigint</span></td><td>DEFAULT 0</td><td>캐시 읽기 토큰 (per 1M: $0.30)</td></tr>
+      <tr><td>total_tokens</td><td><span class="badge badge-yellow">bigint</span></td><td>DEFAULT 0</td><td>4종 합계</td></tr>
+      <tr><td>total_cost</td><td><span class="badge badge-blue">numeric(10,4)</span></td><td>DEFAULT 0</td><td>USD 총 비용</td></tr>
+      <tr><td>model</td><td><span class="badge badge-blue">text</span></td><td></td><td>항상 "claude-code"</td></tr>
+    </table>
+
+    <div class="subsection-title">projects — 포트폴리오</div>
+    <table class="doc-table">
+      <tr><th>컬럼</th><th>타입</th><th>설명</th></tr>
+      <tr><td>id</td><td><span class="badge badge-purple">uuid PK</span></td><td>고유 식별자</td></tr>
+      <tr><td>title</td><td><span class="badge badge-blue">text</span></td><td>프로젝트명</td></tr>
+      <tr><td>description</td><td><span class="badge badge-blue">text</span></td><td>설명</td></tr>
+      <tr><td>tech_stack</td><td><span class="badge badge-blue">text[]</span></td><td>기술 스택 (필터링에 사용)</td></tr>
+      <tr><td>github_url</td><td><span class="badge badge-blue">text</span></td><td>GitHub 링크</td></tr>
+      <tr><td>demo_url</td><td><span class="badge badge-blue">text</span></td><td>데모 링크</td></tr>
+      <tr><td>thumbnail_url</td><td><span class="badge badge-blue">text</span></td><td>썸네일 이미지 URL</td></tr>
+      <tr><td>date</td><td><span class="badge badge-blue">date</span></td><td>개발 날짜 (정렬 기준)</td></tr>
+    </table>
+
+    <div class="subsection-title">blog_posts — 블로그</div>
+    <table class="doc-table">
+      <tr><th>컬럼</th><th>타입</th><th>설명</th></tr>
+      <tr><td>id</td><td><span class="badge badge-purple">uuid PK</span></td><td>고유 식별자</td></tr>
+      <tr><td>title</td><td><span class="badge badge-blue">text</span></td><td>제목</td></tr>
+      <tr><td>content</td><td><span class="badge badge-blue">text</span></td><td>본문 Markdown</td></tr>
+      <tr><td>slug</td><td><span class="badge badge-blue">text UNIQUE</span></td><td>URL 경로 (/blog/[slug])</td></tr>
+      <tr><td>tags</td><td><span class="badge badge-blue">text[]</span></td><td>태그 배열</td></tr>
+      <tr><td>published</td><td><span class="badge badge-green">boolean</span></td><td>false=비공개, true=공개 (fetchPosts 필터 기준)</td></tr>
+    </table>
+  </section>
+
+  <!-- ── API 명세 ── -->
+  <section class="section" id="api">
+    <div class="section-title">API 명세</div>
+    <div class="section-sub">Supabase REST API — Next.js에서 직접 호출 (supabase-js 클라이언트)</div>
+
+    <div class="api-endpoint">
+      <div class="api-header">
+        <span class="api-method get">GET</span>
+        <span class="api-path">daily_logs</span>
+        <span class="api-desc">작업 타임라인 조회</span>
+      </div>
+      <div class="api-body">
+        <div class="code-block"><span class="code-key">supabase</span>.from(<span class="code-str">"daily_logs"</span>).select(<span class="code-str">"*"</span>).order(<span class="code-str">"date"</span>, { ascending: <span class="code-type">false</span> })
+<span class="code-comment">// 반환: id, date, title, content, tags, created_at</span>
+<span class="code-comment">// 정렬: 날짜 최신순</span></div>
+      </div>
+    </div>
+
+    <div class="api-endpoint">
+      <div class="api-header">
+        <span class="api-method get">GET</span>
+        <span class="api-path">projects</span>
+        <span class="api-desc">포트폴리오 목록 조회</span>
+      </div>
+      <div class="api-body">
+        <div class="code-block"><span class="code-key">supabase</span>.from(<span class="code-str">"projects"</span>).select(<span class="code-str">"*"</span>).order(<span class="code-str">"date"</span>, { ascending: <span class="code-type">false</span> })
+<span class="code-comment">// 반환: id, title, description, tech_stack, github_url, demo_url, thumbnail_url, date</span></div>
+      </div>
+    </div>
+
+    <div class="api-endpoint">
+      <div class="api-header">
+        <span class="api-method get">GET</span>
+        <span class="api-path">blog_posts</span>
+        <span class="api-desc">공개된 블로그 포스트 조회</span>
+      </div>
+      <div class="api-body">
+        <div class="code-block"><span class="code-key">supabase</span>.from(<span class="code-str">"blog_posts"</span>).select(<span class="code-str">"*"</span>).eq(<span class="code-str">"published"</span>, <span class="code-type">true</span>).order(<span class="code-str">"created_at"</span>, { ascending: <span class="code-type">false</span> })
+<span class="code-comment">// 필터: published=true 만 반환</span></div>
+      </div>
+    </div>
+
+    <div class="api-endpoint">
+      <div class="api-header">
+        <span class="api-method get">GET</span>
+        <span class="api-path">claude_usage</span>
+        <span class="api-desc">토큰 사용량 전체 조회</span>
+      </div>
+      <div class="api-body">
+        <div class="code-block"><span class="code-key">supabase</span>.from(<span class="code-str">"claude_usage"</span>).select(<span class="code-str">"*"</span>).order(<span class="code-str">"date"</span>, { ascending: <span class="code-type">false</span> })
+<span class="code-comment">// 반환: 날짜별 input/output/cache 토큰 + total_cost</span></div>
+      </div>
+    </div>
+
+    <div class="api-endpoint">
+      <div class="api-header">
+        <span class="api-method post">UPSERT</span>
+        <span class="api-path">daily_logs / claude_usage</span>
+        <span class="api-desc">Python 스크립트에서 데이터 저장</span>
+      </div>
+      <div class="api-body">
+        <div class="code-block"><span class="code-comment"># Python (obsidian_sync.py, token_collector.py)</span>
+<span class="code-key">supabase</span>.table(<span class="code-str">"daily_logs"</span>).upsert(data, on_conflict=<span class="code-str">"date"</span>).execute()
+<span class="code-comment"># on_conflict="date": 같은 날짜면 UPDATE, 없으면 INSERT</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 자동화 시스템 ── -->
+  <section class="section" id="automation">
+    <div class="section-title">자동화 시스템</div>
+    <div class="section-sub">Python 스크립트 2종 — Windows 작업 스케줄러로 자동 실행</div>
+
+    <div class="subsection-title">obsidian_sync.py — Obsidian 연동</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot green">1</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">Obsidian에서 Ctrl+S 저장</div><div class="flow-detail">Day Planner-20260409.md</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot green">2</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">watchdog FileSystemEventHandler.on_modified() 감지</div><div class="flow-detail">정규식 검증: ^Day Planner-\d{8}\.md$ | 중복 방지: 1초 이내 차단</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot green">3</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">parse_note() → 섹션 파싱</div><div class="flow-detail">## 오늘 한 일 / ## 메모 / ## 내일 할 일 분리</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot green">4</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">extract_tags() → 태그 추출</div><div class="flow-detail">정규식 r'#([^\s#]+)' + "daily" 기본 추가</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot green">5</div></div>
+        <div class="flow-content"><div class="flow-title">Supabase daily_logs upsert</div><div class="flow-detail">on_conflict="date" — 같은 날짜 수정 시 덮어쓰기</div></div>
+      </div>
+    </div>
+
+    <div class="subsection-title" style="margin-top:28px">token_collector.py — 토큰 수집</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot blue">1</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">작업 스케줄러 실행 (매일 23:50 + 로그인 시)</div><div class="flow-detail">ClaudeTokenCollector 태스크</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot blue">2</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">glob으로 JSONL 전체 탐색</div><div class="flow-detail">~/.claude/projects/**/*.jsonl</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot blue">3</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">type=="assistant" + usage 추출</div><div class="flow-detail">input / output / cache_creation / cache_read 토큰</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot blue">4</div><div class="flow-connector"></div></div>
+        <div class="flow-content"><div class="flow-title">calc_cost() — 비용 계산</div><div class="flow-detail">input×$3 + output×$15 + cache_c×$3.75 + cache_r×$0.30 (per 1M)</div></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line"><div class="flow-dot blue">5</div></div>
+        <div class="flow-content"><div class="flow-title">Supabase claude_usage upsert</div><div class="flow-detail">on_conflict="date" — 매일 누적 갱신</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SRS ── -->
+  <section class="section" id="srs">
+    <div class="section-title">소프트웨어 요구사항 명세 (SRS)</div>
+    <div class="section-sub">기능 요구사항 및 비기능 요구사항</div>
+
+    <div class="subsection-title">기능 요구사항</div>
+    <table class="doc-table">
+      <tr><th>ID</th><th>기능</th><th>설명</th><th>상태</th></tr>
+      <tr><td>FR-01</td><td>스케줄 자동 연동</td><td>Obsidian 저장 시 웹사이트 자동 반영</td><td><span class="badge badge-green">완료</span></td></tr>
+      <tr><td>FR-02</td><td>토큰 자동 수집</td><td>Claude Code JSONL 파싱 → 일별 비용 집계</td><td><span class="badge badge-green">완료</span></td></tr>
+      <tr><td>FR-03</td><td>포트폴리오 갤러리</td><td>기술스택 필터링 카드형 표시</td><td><span class="badge badge-green">완료</span></td></tr>
+      <tr><td>FR-04</td><td>블로그 목록</td><td>published=true 포스트 목록 표시</td><td><span class="badge badge-green">완료</span></td></tr>
+      <tr><td>FR-05</td><td>블로그 상세 페이지</td><td>/blog/[slug] 동적 라우팅</td><td><span class="badge badge-yellow">미구현</span></td></tr>
+      <tr><td>FR-06</td><td>모바일 반응형</td><td>모바일 브레이크포인트 적용</td><td><span class="badge badge-yellow">미구현</span></td></tr>
+      <tr><td>FR-07</td><td>Claude.ai 사용량 연동</td><td>Playwright 스크래핑</td><td><span class="badge badge-red">계획중</span></td></tr>
+    </table>
+
+    <div class="subsection-title">비기능 요구사항</div>
+    <table class="doc-table">
+      <tr><th>ID</th><th>항목</th><th>목표</th><th>현황</th></tr>
+      <tr><td>NFR-01</td><td>운영 비용</td><td>월 $0 (도메인 제외)</td><td><span class="badge badge-green">달성</span></td></tr>
+      <tr><td>NFR-02</td><td>배포 자동화</td><td>git push → 자동 배포</td><td><span class="badge badge-green">달성</span></td></tr>
+      <tr><td>NFR-03</td><td>데이터 보안</td><td>Supabase RLS anon 정책</td><td><span class="badge badge-green">달성</span></td></tr>
+      <tr><td>NFR-04</td><td>데이터 동기화</td><td>Obsidian 저장 후 1초 이내 반영</td><td><span class="badge badge-green">달성</span></td></tr>
+      <tr><td>NFR-05</td><td>토큰 수집 주기</td><td>매일 23:50 + 로그인 시</td><td><span class="badge badge-green">달성</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ── 환경변수 ── -->
+  <section class="section" id="env">
+    <div class="section-title">환경변수</div>
+    <div class="section-sub">로컬 / Python / Vercel 세 곳에 분리 관리</div>
+
+    <table class="doc-table">
+      <tr><th>변수명</th><th>위치</th><th>용도</th></tr>
+      <tr><td>NEXT_PUBLIC_SUPABASE_URL</td><td><span class="badge badge-blue">.env.local</span> <span class="badge badge-green">Vercel</span></td><td>Supabase 프로젝트 URL</td></tr>
+      <tr><td>NEXT_PUBLIC_SUPABASE_ANON_KEY</td><td><span class="badge badge-blue">.env.local</span> <span class="badge badge-green">Vercel</span></td><td>Publishable Key (브라우저 노출 가능)</td></tr>
+      <tr><td>SUPABASE_URL</td><td><span class="badge badge-yellow">.env</span></td><td>Python 스크립트용 Supabase URL</td></tr>
+      <tr><td>SUPABASE_KEY</td><td><span class="badge badge-yellow">.env</span></td><td>Python 스크립트용 Key</td></tr>
+      <tr><td>VAULT_PATH</td><td><span class="badge badge-yellow">.env</span></td><td>Obsidian Vault 경로 (슬래시 / 필수)</td></tr>
+      <tr><td>DAILY_NOTE_FOLDER</td><td><span class="badge badge-yellow">.env</span></td><td>데일리 노트 폴더명 ("Day Planners")</td></tr>
+      <tr><td>ANTHROPIC_API_KEY</td><td><span class="badge badge-purple">시스템</span></td><td>Anthropic API 키 (Windows 사용자 환경변수)</td></tr>
+    </table>
+  </section>
+
+  <!-- ── 트러블슈팅 ── -->
+  <section class="section" id="trouble">
+    <div class="section-title">트러블슈팅</div>
+    <div class="section-sub">개발 중 발생한 이슈 및 해결법</div>
+
+    <table class="doc-table">
+      <tr><th>#</th><th>문제</th><th>원인</th><th>해결</th></tr>
+      <tr><td>01</td><td>onMouseEnter 에러</td><td>Next.js 기본값이 Server Component</td><td>파일 최상단 "use client" 추가</td></tr>
+      <tr><td>02</td><td>Python 경로 유니코드 오류</td><td>.env 역슬래시(\) 이스케이프 충돌</td><td>.env에서 / 슬래시로 경로 표기</td></tr>
+      <tr><td>03</td><td>Supabase 401 에러</td><td>Vercel 환경변수 값 오류</td><td>Publishable key 재확인 후 재입력</td></tr>
+      <tr><td>04</td><td>데이터 미표시</td><td>RLS 정책 미설정</td><td>anon role SELECT policy 추가</td></tr>
+      <tr><td>05</td><td>Admin API 404</td><td>개인 계정 Admin API 미지원</td><td>~/.claude JSONL 로컬 파싱으로 대체</td></tr>
+      <tr><td>06</td><td>git push 실패</td><td>git 사용자 정보 미설정</td><td>git config --global user.email/name 설정</td></tr>
+      <tr><td>07</td><td>obsidian_sync.py load_dotenv 미동작</td><td>os.getenv()에 값을 직접 입력</td><td>os.getenv("변수명") 형태로 수정</td></tr>
+    </table>
+  </section>
+
+</div>
+
+<script>
+  // 스크롤 시 활성 네비 업데이트
+  const sections = document.querySelectorAll('.section');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 60) current = s.id;
+    });
+    navItems.forEach(n => {
+      n.classList.toggle('active', n.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
